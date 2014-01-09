@@ -65,7 +65,12 @@
         var options = {
             gfm: true,
             tables: true,
-            breaks: true
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false,
+            langPrefix: 'language-'
         };
         if ($.md.config.lineBreaks === 'original')
             options.breaks = false;
