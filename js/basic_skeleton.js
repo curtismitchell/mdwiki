@@ -34,7 +34,7 @@
         if ($.trim($pageTitle.toptext()).length > 0) {
             $('#md-title').prepend($pageTitle);
             var title = $pageTitle.toptext();
-            // document.title = title;
+            document.title = document.title = "MDWiki - " + title;
         } else {
             $('#md-title').remove();
         }
