@@ -65,17 +65,22 @@
         var options = {
             gfm: true,
             tables: true,
-            breaks: true
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false,
+            langPrefix: 'language-'
         };
         if ($.md.config.lineBreaks === 'original')
             options.breaks = false;
         else if ($.md.config.lineBreaks === 'gfm')
             options.breaks = true;
 
-        kramed.setOptions(options);
+        marked.setOptions(options);
 
         // get sample markdown
-        var uglyHtml = kramed(markdown);
+        var uglyHtml = marked(markdown);
         return uglyHtml;
     }
 
@@ -164,23 +169,42 @@
                 url: href,
                 dataType: 'text'
             })
-            .done(function (data) {
-                var $html = $(transformMarkdown(data));
-                if (text.startsWith('preview:')) {
-                    // only insert the selected number of paragraphs; default 3
-                    var num_preview_elements = parseInt(text.substring(8), 10) ||3;
-                    var $preview = selectPreviewElements ($html, num_preview_elements);
-                    $preview.last().append('<a href="' + href +'"> ...read more &#10140;</a>');
-                    $preview.insertBefore($el.parent('p').eq(0));
-                    $el.remove();
-                } else {
-                    $html.insertAfter($el.parents('p'));
-                    $el.remove();
-                }
-            }).always(function () {
-                latch.countDown();
-            });
+                .done(function (data) {
+                    var $html = $(transformMarkdown(data));
+                    if (text.startsWith('preview:')) {
+                        // only insert the selected number of paragraphs; default 3
+                        var num_preview_elements = parseInt(text.substring(8), 10) ||3;
+                        var $preview = selectPreviewElements ($html, num_preview_elements);
+                        $preview.last().append('<a href="' + href +'"> ...read more &#10140;</a>');
+                        $preview.insertBefore($el.parent('p').eq(0));
+                        $el.remove();
+                    } else {
+                        $html.insertAfter($el.parents('p'));
+                        $el.remove();
+                    }
+                }).always(function () {
+                    latch.countDown();
+                });
         });
+    }
+
+    function isSpecialLink(href) {
+        if (!href) return false;
+
+        if (href.lastIndexOf('data:') >= 0)
+            return true;
+
+        if (href.startsWith('mailto:'))
+            return true;
+
+        if (href.startsWith('file:'))
+            return true;
+
+        if (href.startsWith('ftp:'))
+            return true;
+
+        // TODO capture more special links: every non-http link with : like
+        // torrent:// etc.
     }
 
     // modify internal links so we load them through our engine
@@ -210,10 +234,13 @@
             }
             var href = link.attr(hrefAttribute);
 
-            if (href && href.lastIndexOf ('?') >= 0)
+            if (href && href.lastIndexOf ('#!') >= 0)
                 return;
 
-            if (!isImage && href.startsWith ('?')) {
+            if (isSpecialLink(href))
+                return;
+
+            if (!isImage && href.startsWith ('#') && !href.startsWith('#!')) {
                 // in-page link
                 link.click(function(ev) {
                     ev.preventDefault();
@@ -232,7 +259,7 @@
 
             function build_link (url) {
                 if ($.md.util.hasMarkdownFileExtension (url))
-                    return '?' + url;
+                    return '#!' + url;
                 else
                     return url;
             }
@@ -266,9 +293,9 @@
             $.md.NavigationDfd.done(function() {
                 done();
             })
-            .fail(function() {
-                done();
-            });
+                .fail(function() {
+                    done();
+                });
         });
 
         $.md.stage('transform').subscribe(function(done) {
@@ -279,14 +306,24 @@
                 return;
             }
 
-            var navHtml = kramed(navMD);
-            var h = $('<div>' + navHtml + '</div>');
-            // TODO .html() is evil!!!
-            h.find('p').each(function(i,e) {
-                var el = $(e);
-                el.replaceWith(el.html());
+            var navHtml = marked(navMD);
+            // TODO why are <script> tags from navHtml APPENDED to the jqcol?
+            var $h = $('<div>' + navHtml + '</div>');
+
+            // insert <scripts> from navigation.md into the DOM
+            $h.each(function (i,e) {
+                if (e.tagName === 'SCRIPT') {
+                    $('script').first().before(e);
+                }
             });
-            $('#md-menu').append(h.html());
+
+            // TODO .html() is evil!!!
+            var $navContent = $h.eq(0);
+            $navContent.find('p').each(function(i,e) {
+                var $el = $(e);
+                $el.replaceWith($el.html());
+            });
+            $('#md-menu').append($navContent.html());
             done();
         });
 
@@ -438,15 +475,17 @@
     }
 
     function extractHashData() {
-        // first char is the ?
+        // first char is the # or #!
         var href;
-        if (window.location.search.startsWith('?')) {
-            href = window.location.search.substring(2);
+        if (window.location.hash.startsWith('#!')) {
+            href = window.location.hash.substring(2);
+        } else {
+            href = window.location.hash.substring(1);
         }
         href = decodeURIComponent(href);
 
         // extract possible in-page anchor
-        var ex_pos = href.indexOf('?');
+        var ex_pos = href.indexOf('#');
         if (ex_pos !== -1) {
             $.md.inPageAnchor = href.substring(ex_pos + 1);
             $.md.mainHref = href.substring(0, ex_pos);
@@ -457,15 +496,16 @@
 
     function appendDefaultFilenameToHash () {
         var newHashString = '';
-        var currentHashString = window.location.search || '';
+        var currentHashString = window.location.hash || '';
         if (currentHashString === '' ||
-            currentHashString === '?')
+            currentHashString === '#'||
+            currentHashString === '#!')
         {
             newHashString = '#!index.md';
         }
-        else if (currentHashString.startsWith ('?') &&
-                 currentHashString.endsWith('/')
-                ) {
+        else if (currentHashString.startsWith ('#!') &&
+            currentHashString.endsWith('/')
+        ) {
             newHashString = currentHashString + 'index.md';
         }
         if (newHashString)

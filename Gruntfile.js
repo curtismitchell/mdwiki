@@ -59,15 +59,15 @@ module.exports = function(grunt) {
         ],
         // ONLY PUT ALREADY MINIFIED FILES IN HERE!
         internalJsFiles: [
-            'extlib/js/jquery.colorbox.min.js'
+            'extlib/js/jquery.colorbox.min.js',
+            'extlib/js/highlight-8.4.min.pack.js'
         ],
 
         // files that we inline in the fat release (basically everything)
         // ONLY PUT ALREADY MINIFIED FILES IN HERE!
         externalJsFiles: [
             'extlib/js/jquery-1.8.3.min.js',
-            'extlib/js/bootstrap-3.0.0.min.js',
-            'extlib/js/highlight.8.4-pack.min.js'
+            'extlib/js/bootstrap-3.0.0.min.js'
         ],
         externalCssFiles: [
             'extlib/css/highlight.github.css',

@@ -81,7 +81,7 @@
         navbar +=       '<span class="icon-bar"></span>';
         navbar +=       '<span class="icon-bar"></span>';
         navbar +=     '</button>';
-        navbar +=     '<a class="navbar-brand" href="#"></a>';
+        navbar +=     '<a class="navbar-brand" href="?"></a>';
         navbar +=   '</div>';
 
         navbar +=   '<div class="collapse navbar-collapse navbar-ex1-collapse">';
@@ -370,13 +370,13 @@
         if ($('#md-menu').find ('li').length === 0) {
             return;
         }
-		var filename = window.location.hash;
+        var filename = window.location.search;
 
-		if (filename.length === 0) {
-            filename = '#!index.md';
+        if (filename.length === 0) {
+            filename = '?index.md';
         }
-		var selector = 'li:has(a[href="' + filename + '"])';
-		$('#md-menu').find (selector).addClass ('active');
+        var selector = 'li:has(a[href="' + filename + '"])';
+        $('#md-menu').find (selector).addClass ('active');
     }
 
     // replace all <p> around images with a <div class="thumbnail" >
