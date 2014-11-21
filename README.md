@@ -10,6 +10,15 @@ See http://www.mdwiki.info for more info and documentation.
 ------
 
 
+TM Fork
+-------
+
+- Hash (!#) to Search (?) (e.g- http://tm.dataknow.net/r/?20041110 MDWiki.md)
+- Added filedate gimmicks
+- Update highlight.js (8.4)
+- Fix Mathjax.js
+
+
 Download
 --------
 
@@ -36,7 +45,9 @@ How to build from source
     grunt release
 
     (or if not installed globally)
-    ./node_modules/.bin/grunt release
+    ./node_modules/.bin/grunt release --force
+
+    (highlight 8.4 js has some minor syntactic errors. Therefore please use --force option)
 
 6. Find the `mdwiki.html` in the `release/` and `dist/` folder
 

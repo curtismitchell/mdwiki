@@ -39,6 +39,7 @@ module.exports = function(grunt) {
             'js/gimmicks/colorbox.js',
             'js/gimmicks/carousel.js',
             'js/gimmicks/disqus.js',
+            'js/gimmicks/filedate.js',
             'js/gimmicks/facebooklike.js',
             'js/gimmicks/forkmeongithub.js',
             //'js/gimmicks/github_gist.js',
@@ -60,7 +61,8 @@ module.exports = function(grunt) {
         // ONLY PUT ALREADY MINIFIED FILES IN HERE!
         internalJsFiles: [
             'extlib/js/jquery.colorbox.min.js',
-            'extlib/js/highlight-8.4.min.pack.js'
+            'extlib/js/highlight-8.4.min.pack.js',
+            'extlib/js/moment-with-locales.min.js'
         ],
 
         // files that we inline in the fat release (basically everything)
@@ -140,6 +142,7 @@ module.exports = function(grunt) {
                     marked: true,
                     google: true,
                     hljs: true,
+                    moment: true,
                     /* leaflet.js*/
                     L: true,
                     console: true
@@ -240,7 +243,7 @@ module.exports = function(grunt) {
     grunt.registerTask('release',[
         'release-slim', 'release-fat', 'release-debug',
         'copy:release_slim', 'copy:release_fat', 'copy:release_debug', 'copy:release_templates',
-        'shell:zip_release', 'copy:to_dropbox'
+        'shell:zip_release'
     ]);
     // Default task.
     grunt.registerTask('default',

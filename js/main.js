@@ -234,13 +234,13 @@
             }
             var href = link.attr(hrefAttribute);
 
-            if (href && href.lastIndexOf ('#!') >= 0)
+            if (href && href.lastIndexOf ('?') >= 0)
                 return;
 
             if (isSpecialLink(href))
                 return;
 
-            if (!isImage && href.startsWith ('#') && !href.startsWith('#!')) {
+            if (!isImage && href.startsWith ('?')) {
                 // in-page link
                 link.click(function(ev) {
                     ev.preventDefault();
@@ -259,7 +259,7 @@
 
             function build_link (url) {
                 if ($.md.util.hasMarkdownFileExtension (url))
-                    return '#!' + url;
+                    return '?' + url;
                 else
                     return url;
             }
@@ -475,17 +475,15 @@
     }
 
     function extractHashData() {
-        // first char is the # or #!
+        // first char is the ?
         var href;
-        if (window.location.hash.startsWith('#!')) {
-            href = window.location.hash.substring(2);
-        } else {
-            href = window.location.hash.substring(1);
+        if (window.location.search.startsWith('?')) {
+            href = window.location.search.substring(1);
         }
         href = decodeURIComponent(href);
 
         // extract possible in-page anchor
-        var ex_pos = href.indexOf('#');
+        var ex_pos = href.indexOf('?');
         if (ex_pos !== -1) {
             $.md.inPageAnchor = href.substring(ex_pos + 1);
             $.md.mainHref = href.substring(0, ex_pos);
@@ -495,21 +493,20 @@
     }
 
     function appendDefaultFilenameToHash () {
-        var newHashString = '';
-        var currentHashString = window.location.hash || '';
-        if (currentHashString === '' ||
-            currentHashString === '#'||
-            currentHashString === '#!')
+        var newSearchString = '';
+        var currentSearchString = window.location.search || '';
+        if (currentSearchString === '' ||
+            currentSearchString === '?')
         {
-            newHashString = '#!index.md';
+            newSearchString = '?index.md';
         }
-        else if (currentHashString.startsWith ('#!') &&
-            currentHashString.endsWith('/')
+        else if (currentSearchString.startsWith ('?') &&
+            currentSearchString.endsWith('/')
         ) {
-            newHashString = currentHashString + 'index.md';
+            newSearchString = currentSearchString + 'index.md';
         }
-        if (newHashString)
-            window.location.hash = newHashString;
+        if (newSearchString)
+            window.location.search = newSearchString;
     }
 
     $(document).ready(function () {
@@ -521,7 +518,7 @@
 
         appendDefaultFilenameToHash();
 
-        $(window).bind('hashchange', function () {
+        $(window).bind('searchchange', function () {
             window.location.reload(false);
         });
 
