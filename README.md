@@ -13,16 +13,25 @@ See http://www.mdwiki.info for more info and documentation.
 TM Fork
 -------
 
-- Hash (!#) to Search (?) (e.g- http://tm.dataknow.net/r/?20041110 MDWiki.md)
+Taemin Lee Fork based on MDWiki 0.6 because of current master branch doesn't render md page correctly.
+
+- Hash (!#) to Search (?) (e.g- http://tm.dataknow.net/r/?index.md)
+    - In reulst, Disqus attached each page separately
 - Added filedate gimmicks
 - Update highlight.js (8.4)
-- Fix Mathjax.js
+    - does not hanging render code block
+    - 100+ languages support
+- Mathjax.js fixed
+    - $$$ inline, $$ block
+    - marked.js changed to render mathjax correctly
+- document has <h1> text (e.g- MDWiki - index)
+- and more minor fixes
 
 
 Download
 --------
 
-See <https://github.com/Dynalon/mdwiki/releases> for readily precompiled releases.
+[Download as new file](http://tm.dataknow.net/index.html)
 
 How to build from source
 ------------------------
