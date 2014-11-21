@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         externalJsFiles: [
             'extlib/js/jquery-1.8.3.min.js',
             'extlib/js/bootstrap-3.0.0.min.js',
-            'extlib/js/highlight-7.3.pack.min.js'
+            'extlib/js/highlight.8.4-pack.min.js'
         ],
         externalCssFiles: [
             'extlib/css/highlight.github.css',
@@ -179,6 +179,12 @@ module.exports = function(grunt) {
                 flatten: true,
                 src: [ 'release_templates/*' ],
                 dest: 'release/mdwiki-<%= grunt.config("pkg").version %>/'
+            },
+            to_dropbox: {
+                expand: false,
+                flatten: true,
+                src: [ 'dist/mdwiki-debug.html' ],
+                dest: 'C:/Dropbox/md/p/index.html'
             }
         },
         shell: {
@@ -234,7 +240,7 @@ module.exports = function(grunt) {
     grunt.registerTask('release',[
         'release-slim', 'release-fat', 'release-debug',
         'copy:release_slim', 'copy:release_fat', 'copy:release_debug', 'copy:release_templates',
-        'shell:zip_release'
+        'shell:zip_release', 'copy:to_dropbox'
     ]);
     // Default task.
     grunt.registerTask('default',

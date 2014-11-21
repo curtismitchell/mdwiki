@@ -72,10 +72,10 @@
         else if ($.md.config.lineBreaks === 'gfm')
             options.breaks = true;
 
-        marked.setOptions(options);
+        kramed.setOptions(options);
 
         // get sample markdown
-        var uglyHtml = marked(markdown);
+        var uglyHtml = kramed(markdown);
         return uglyHtml;
     }
 
@@ -210,10 +210,10 @@
             }
             var href = link.attr(hrefAttribute);
 
-            if (href && href.lastIndexOf ('#!') >= 0)
+            if (href && href.lastIndexOf ('?') >= 0)
                 return;
 
-            if (!isImage && href.startsWith ('#') && !href.startsWith('#!')) {
+            if (!isImage && href.startsWith ('?')) {
                 // in-page link
                 link.click(function(ev) {
                     ev.preventDefault();
@@ -232,7 +232,7 @@
 
             function build_link (url) {
                 if ($.md.util.hasMarkdownFileExtension (url))
-                    return '#!' + url;
+                    return '?' + url;
                 else
                     return url;
             }
@@ -279,7 +279,7 @@
                 return;
             }
 
-            var navHtml = marked(navMD);
+            var navHtml = kramed(navMD);
             var h = $('<div>' + navHtml + '</div>');
             // TODO .html() is evil!!!
             h.find('p').each(function(i,e) {
@@ -438,17 +438,15 @@
     }
 
     function extractHashData() {
-        // first char is the # or #!
+        // first char is the ?
         var href;
-        if (window.location.hash.startsWith('#!')) {
-            href = window.location.hash.substring(2);
-        } else {
-            href = window.location.hash.substring(1);
+        if (window.location.search.startsWith('?')) {
+            href = window.location.search.substring(2);
         }
         href = decodeURIComponent(href);
 
         // extract possible in-page anchor
-        var ex_pos = href.indexOf('#');
+        var ex_pos = href.indexOf('?');
         if (ex_pos !== -1) {
             $.md.inPageAnchor = href.substring(ex_pos + 1);
             $.md.mainHref = href.substring(0, ex_pos);
@@ -459,14 +457,13 @@
 
     function appendDefaultFilenameToHash () {
         var newHashString = '';
-        var currentHashString = window.location.hash || '';
+        var currentHashString = window.location.search || '';
         if (currentHashString === '' ||
-            currentHashString === '#'||
-            currentHashString === '#!')
+            currentHashString === '?')
         {
             newHashString = '#!index.md';
         }
-        else if (currentHashString.startsWith ('#!') &&
+        else if (currentHashString.startsWith ('?') &&
                  currentHashString.endsWith('/')
                 ) {
             newHashString = currentHashString + 'index.md';
