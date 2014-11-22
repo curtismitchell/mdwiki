@@ -34,7 +34,7 @@
                 var dsq = document.createElement('script');
                 dsq.type = 'text/javascript';
                 dsq.async = true;
-                dsq.src = '//api.solidopinion.com/widget/embed.js';
+                dsq.src = 'https://api.solidopinion.com/widget/embed.js';
                 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
             }
         });
