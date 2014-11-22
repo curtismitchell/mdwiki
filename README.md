@@ -25,7 +25,7 @@ Changes
 - Mathjax.js fixed
     - $$$ : inline, $$ : block
     - marked.js support mathjax to render mathjax correctly
-- document has `<h1>` text (e.g- MDWiki - index)
+- document.title shows `<h1>` title (e.g- MDWiki - index)
 - and more minor fixes
 
 
