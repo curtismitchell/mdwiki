@@ -18,6 +18,8 @@ Taemin Lee Fork based on MDWiki 0.6 because of current master branch doesn't ren
 - Hash (!#) to Search (?) (e.g- http://tm.dataknow.net/r/?index.md)
     - In reulst, Disqus attached each page separately
 - Added filedate gimmicks
+- Added solidopinion gimmicks
+    - more reliable service in this time
 - Update highlight.js (8.4)
     - does not hanging render code block
     - 100+ languages support
