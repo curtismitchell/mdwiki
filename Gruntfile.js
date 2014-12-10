@@ -51,6 +51,7 @@ module.exports = function(grunt) {
             // 'js/gimmicks/leaflet.js',
             'js/gimmicks/solidopinion.js',
             'js/gimmicks/remark.js',
+            'js/gimmicks/recent.js',
             'js/gimmicks/themechooser.js',
             'js/gimmicks/twitter.js',
             'js/gimmicks/youtube_embed.js'
