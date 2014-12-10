@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/Dynalon/mdwiki.png?branch=master)](https://travis-ci.org/Dynalon/mdwiki)
-
-
 MDwiki
 ======
 
@@ -10,10 +7,43 @@ See http://www.mdwiki.info for more info and documentation.
 ------
 
 
+TM Fork
+-------
+
+Taemin Lee Fork based on MDWiki 0.6, because of current master branch doesn't render md page correctly.
+
+Changes
+
+- Hash (!#) to Search (?) (e.g- http://tm.dataknow.net/r/?index.md)
+    - In result, external embedding services (e.g. disqus, solidOpinion, etc) are works well in each page separately
+- Added security mode
+    - needing server-side execution, secutiry module uses PHP
+    - overriding direct ajax load to
+    - setting
+        - insert 'secutiry : true' attribute to config.json
+        - rename .md file to use postfix ! ~ !!!
+        - setting pw.php, ip.php
+    - mode
+        - ! : password mode (e.g. !index.md)
+        - !! : IP filter mode (e.g. !!index.md)
+        - !!! : ALL block mode (e.g. !!!index.md)
+- Added filedate gimmicks
+- Added solidopinion gimmicks
+    - more reliable service in this time
+- Update highlight.js (8.4)
+    - does not hanging on highlighting code block
+    - 100+ languages support
+- Mathjax.js fixed
+    - $$$ : inline, $$ : block
+    - marked.js support mathjax to render mathjax correctly
+- document.title shows `<h1>` title (e.g- MDWiki - index)
+- and more minor fixes
+
+
 Download
 --------
 
-See <https://github.com/Dynalon/mdwiki/releases> for readily precompiled releases.
+[Download : save as new file](http://tm.dataknow.net/index.html)
 
 How to build from source
 ------------------------
@@ -36,11 +66,8 @@ How to build from source
     grunt release
 
     (or if not installed globally)
-    ./node_modules/.bin/grunt release
+    ./node_modules/.bin/grunt release --force
+
+    (highlight 8.4 js has some minor syntactic errors. Therefore please use --force option)
 
 6. Find the `mdwiki.html` in the `release/` and `dist/` folder
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Dynalon/mdwiki/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-

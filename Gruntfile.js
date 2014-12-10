@@ -39,6 +39,7 @@ module.exports = function(grunt) {
             'js/gimmicks/colorbox.js',
             'js/gimmicks/carousel.js',
             'js/gimmicks/disqus.js',
+            'js/gimmicks/filedate.js',
             'js/gimmicks/facebooklike.js',
             'js/gimmicks/forkmeongithub.js',
             //'js/gimmicks/github_gist.js',
@@ -48,6 +49,9 @@ module.exports = function(grunt) {
             'js/gimmicks/iframe.js',
             'js/gimmicks/math.js',
             // 'js/gimmicks/leaflet.js',
+            'js/gimmicks/solidopinion.js',
+            'js/gimmicks/remark.js',
+            'js/gimmicks/recent.js',
             'js/gimmicks/themechooser.js',
             'js/gimmicks/twitter.js',
             'js/gimmicks/youtube_embed.js'
@@ -59,15 +63,16 @@ module.exports = function(grunt) {
         ],
         // ONLY PUT ALREADY MINIFIED FILES IN HERE!
         internalJsFiles: [
-            'extlib/js/jquery.colorbox.min.js'
+            'extlib/js/jquery.colorbox.min.js',
+            'extlib/js/highlight-8.4.min.pack.js',
+            'extlib/js/moment-with-locales.min.js'
         ],
 
         // files that we inline in the fat release (basically everything)
         // ONLY PUT ALREADY MINIFIED FILES IN HERE!
         externalJsFiles: [
             'extlib/js/jquery-1.8.3.min.js',
-            'extlib/js/bootstrap-3.0.0.min.js',
-            'extlib/js/highlight-7.3.pack.min.js'
+            'extlib/js/bootstrap-3.0.0.min.js'
         ],
         externalCssFiles: [
             'extlib/css/highlight.github.css',
@@ -140,6 +145,7 @@ module.exports = function(grunt) {
                     marked: true,
                     google: true,
                     hljs: true,
+                    moment: true,
                     /* leaflet.js*/
                     L: true,
                     console: true
@@ -179,6 +185,18 @@ module.exports = function(grunt) {
                 flatten: true,
                 src: [ 'release_templates/*' ],
                 dest: 'release/mdwiki-<%= grunt.config("pkg").version %>/'
+            },
+            release_security: {
+                expand: true,
+                flatten: true,
+                src: [ 'security_php/*' ],
+                dest: 'release/mdwiki-<%= grunt.config("pkg").version %>/'
+            },
+            to_dropbox: {
+                expand: false,
+                flatten: true,
+                src: [ 'dist/mdwiki-debug.html' ],
+                dest: 'C:/Dropbox/md/p/index.html'
             }
         },
         shell: {
@@ -234,7 +252,7 @@ module.exports = function(grunt) {
     grunt.registerTask('release',[
         'release-slim', 'release-fat', 'release-debug',
         'copy:release_slim', 'copy:release_fat', 'copy:release_debug', 'copy:release_templates',
-        'shell:zip_release'
+        'shell:zip_release', 'copy:release_security'
     ]);
     // Default task.
     grunt.registerTask('default',
