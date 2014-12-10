@@ -89,8 +89,26 @@
         var md = '';
 
         $.md.stage('init').subscribe(function(done) {
+
+            var mdUrl = "";
+
+            /*$(marked(navMD)).find('a').each(function(i,e) {
+                var link = $(e);
+                // link must be jquery collection
+                var hrefAttribute = 'href';
+
+                var href = link.attr(hrefAttribute);
+
+                //alert(href);
+            });*/
+
+            if($.md.config.security == true)
+                var mdUrl = $.md.securityHref;
+            else
+                var mdUrl = $.md.mainHref;
+
             var ajaxReq = {
-                url: $.md.mainHref,
+                url: mdUrl,
                 dataType: 'text'
             };
             $.ajax(ajaxReq).done(function(data) {
@@ -278,7 +296,8 @@
     $.md.NavigationDfd = $.Deferred();
     var ajaxReq = {
         url: 'navigation.md',
-        dataType: 'text'
+        dataType: 'text',
+        async: false
     };
     $.ajax(ajaxReq).done(function(data) {
         navMD = data;
@@ -343,7 +362,7 @@
     }
 
     $.md.ConfigDfd = $.Deferred();
-    $.ajax({url: 'config.json', dataType: 'text'}).done(function(data) {
+    $.ajax({url: 'config.json', dataType: 'text', async:false}).done(function(data) {
         try {
             var data_json = JSON.parse(data);
             $.md.config = $.extend($.md.config, data_json);
@@ -386,6 +405,11 @@
     function loadContent(href) {
         $.md.mainHref = href;
 
+        if($.md.config.security == true)
+        {
+            makeSecurityHref(href);
+        }
+
         registerFetchMarkdown();
         registerClearContent();
 
@@ -418,6 +442,28 @@
             done();
         });
         runStages();
+    }
+
+    function makeSecurityHref(href) {
+        var password = "";
+        var secLevel = 0;
+
+        if(href.startsWith("!!!"))
+        {
+            secLevel = 3;
+        } else if (href.startsWith("!!"))
+        {
+            secLevel = 2;
+        } else if (href.startsWith("!"))
+        {
+            secLevel = 1;
+        }
+
+        if(secLevel == 1)
+        {
+            password = prompt("Insert a password","");
+        }
+        $.md.securityHref = "security.php?level="+secLevel+"&md="+href+"&pw="+password;
     }
 
     function runStages() {

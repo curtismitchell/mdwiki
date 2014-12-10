@@ -16,6 +16,17 @@ Changes
 
 - Hash (!#) to Search (?) (e.g- http://tm.dataknow.net/r/?index.md)
     - In result, external embedding services (e.g. disqus, solidOpinion, etc) are works well in each page separately
+- Added security mode
+    - needing server-side execution, secutiry module uses PHP
+    - overriding direct ajax load to
+    - setting
+        - insert 'secutiry : true' attribute to config.json
+        - rename .md file to use postfix ! ~ !!!
+        - setting pw.php, ip.php
+    - mode
+        - ! : password mode (e.g. !index.md)
+        - !! : IP filter mode (e.g. !!index.md)
+        - !!! : ALL block mode (e.g. !!!index.md)
 - Added filedate gimmicks
 - Added solidopinion gimmicks
     - more reliable service in this time

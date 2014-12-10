@@ -50,6 +50,7 @@ module.exports = function(grunt) {
             'js/gimmicks/math.js',
             // 'js/gimmicks/leaflet.js',
             'js/gimmicks/solidopinion.js',
+            'js/gimmicks/remark.js',
             'js/gimmicks/themechooser.js',
             'js/gimmicks/twitter.js',
             'js/gimmicks/youtube_embed.js'
@@ -184,6 +185,12 @@ module.exports = function(grunt) {
                 src: [ 'release_templates/*' ],
                 dest: 'release/mdwiki-<%= grunt.config("pkg").version %>/'
             },
+            release_security: {
+                expand: true,
+                flatten: true,
+                src: [ 'security_php/*' ],
+                dest: 'release/mdwiki-<%= grunt.config("pkg").version %>/'
+            },
             to_dropbox: {
                 expand: false,
                 flatten: true,
@@ -244,7 +251,7 @@ module.exports = function(grunt) {
     grunt.registerTask('release',[
         'release-slim', 'release-fat', 'release-debug',
         'copy:release_slim', 'copy:release_fat', 'copy:release_debug', 'copy:release_templates',
-        'shell:zip_release'
+        'shell:zip_release', 'copy:release_security'
     ]);
     // Default task.
     grunt.registerTask('default',
